@@ -12,9 +12,14 @@ API de FastAPI para analizar imágenes usando OpenAI GPT-4 Vision.
    - Conecta tu repositorio de GitHub
 
 2. **Configura las variables de entorno en Railway:**
-   - `APP_SECRET`: Tu secreto para autenticación
-   - `OPENAI_API_KEY`: Tu clave de API de OpenAI
-   - `OPENAI_MODEL`: gpt-4o-mini (opcional)
+   - Ve a la pestaña "Variables" de tu proyecto
+   - Agrega estas variables:
+   
+   | Variable | Valor | Requerida | Descripción |
+   |----------|-------|-----------|-------------|
+   | `OPENAI_API_KEY` | `sk-...` | ✅ **SÍ** | Tu clave de API de OpenAI |
+   | `OPENAI_MODEL` | `gpt-4o-mini` | ✅ **SÍ** | Modelo a usar |
+   | `APP_SECRET` | Cualquier valor | ❌ No | Autenticación (deshabilitada) |
 
 3. **Railway detectará automáticamente:**
    - `requirements.txt` para las dependencias
@@ -30,10 +35,13 @@ pip install -r requirements.txt
 
 2. Configura las variables de entorno:
 ```bash
-# Copia el archivo de ejemplo
-cp .env.example .env
+# En Windows PowerShell
+$env:OPENAI_API_KEY="sk-tu-clave-aqui"
+$env:OPENAI_MODEL="gpt-4o-mini"
 
-# Edita .env con tus valores reales
+# En Linux/Mac
+export OPENAI_API_KEY="sk-tu-clave-aqui"
+export OPENAI_MODEL="gpt-4o-mini"
 ```
 
 3. Ejecuta el servidor:
@@ -43,16 +51,16 @@ python main.py
 
 ## Variables de entorno requeridas
 
-- `APP_SECRET`: Secreto para autenticación de la API
-- `OPENAI_API_KEY`: Clave de API de OpenAI
-- `OPENAI_MODEL`: Modelo a usar (opcional, por defecto: gpt-4o-mini)
+- `OPENAI_API_KEY`: Clave de API de OpenAI (requerida)
+- `OPENAI_MODEL`: Modelo a usar (requerida)
+- `APP_SECRET`: Secreto para autenticación (opcional - deshabilitada temporalmente)
 
 ## Uso
 
 ### Endpoint: POST /analyze-image
 
 **Headers:**
-- `Authorization: Bearer <APP_SECRET>`
+- `Authorization: Bearer <APP_SECRET>` (Opcional - autenticación deshabilitada)
 
 **Body:**
 ```json

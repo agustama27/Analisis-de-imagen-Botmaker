@@ -4,16 +4,27 @@ import httpx
 from fastapi import FastAPI, Header, HTTPException, Request
 from openai import OpenAI
 
+# Variables de entorno - Railway las proporciona automáticamente
 APP_SECRET = os.getenv("APP_SECRET", "")
-MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # visión
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+# Validar que las variables requeridas estén configuradas
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY no está configurada. Configúrala en Railway.")
+if not MODEL:
+    raise ValueError("OPENAI_MODEL no está configurada. Configúrala en Railway.")
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 app = FastAPI()
 
 def ensure_auth(auth_header: Optional[str]):
-    token = (auth_header or "").replace("Bearer ", "").strip()
-    if not APP_SECRET or token != APP_SECRET:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+    # Autenticación deshabilitada temporalmente
+    # token = (auth_header or "").replace("Bearer ", "").strip()
+    # if not APP_SECRET or token != APP_SECRET:
+    #     raise HTTPException(status_code=401, detail="Unauthorized")
+    pass
 
 def find_last_image_url(payload: Any) -> Optional[str]:
     """Busca la última imagen recorriendo estructuras típicas de historial."""
@@ -138,5 +149,13 @@ async def analyze_image(request: Request, authorization: Optional[str] = Header(
 
 if __name__ == "__main__":
     import uvicorn
+    
+    # Railway proporciona el puerto automáticamente
     port = int(os.getenv("PORT", 8000))
+    
+    print(f"🚀 Iniciando servidor en puerto {port}")
+    print(f"📊 Modelo: {MODEL}")
+    print(f"🔑 API Key configurada: {'✅' if OPENAI_API_KEY else '❌'}")
+    print(f"🤖 Modelo configurado: {'✅' if MODEL else '❌'}")
+    
     uvicorn.run(app, host="0.0.0.0", port=port)

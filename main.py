@@ -9,10 +9,21 @@ APP_SECRET = os.getenv("APP_SECRET", "")
 MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# Debug: Mostrar todas las variables de entorno
+print("🔍 Variables de entorno detectadas:")
+print(f"OPENAI_API_KEY: {'✅ Configurada' if OPENAI_API_KEY else '❌ No configurada'}")
+print(f"OPENAI_MODEL: {'✅ Configurada' if MODEL else '❌ No configurada'}")
+print(f"APP_SECRET: {'✅ Configurada' if APP_SECRET else '❌ No configurada'}")
+print(f"PORT: {os.getenv('PORT', 'No configurado')}")
+
 # Validar que las variables requeridas estén configuradas
 if not OPENAI_API_KEY:
+    print("❌ ERROR: OPENAI_API_KEY no está configurada")
+    print("💡 Solución: Ve a Railway → Variables → Agrega OPENAI_API_KEY")
     raise ValueError("OPENAI_API_KEY no está configurada. Configúrala en Railway.")
 if not MODEL:
+    print("❌ ERROR: OPENAI_MODEL no está configurada")
+    print("💡 Solución: Ve a Railway → Variables → Agrega OPENAI_MODEL")
     raise ValueError("OPENAI_MODEL no está configurada. Configúrala en Railway.")
 
 client = OpenAI(api_key=OPENAI_API_KEY)
